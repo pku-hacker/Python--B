@@ -1,3 +1,2 @@
-# Python - 计概B
+# Dynamic Programing
 
-숙제 중 어려웠던 문제들, 혹은 알게 된 지식들
