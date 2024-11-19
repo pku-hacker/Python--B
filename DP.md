@@ -1,7 +1,5 @@
 # Dynamic Programming
 
-### Dynamic Programming (DP)
-
 **Dynamic Programming** is a method used in computer science and mathematics to solve problems by breaking them down into simpler subproblems. It is particularly useful for problems with overlapping subproblems and optimal substructure properties.
 
 ### Key Concepts of Dynamic Programming:
