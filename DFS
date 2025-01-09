@@ -1,0 +1,122 @@
+### **深度优先搜索（Depth-First Search, DFS）概述**
+深度优先搜索是一种用于图和树的遍历算法，遵循“深入尽可能深的分支再回溯”的原则。DFS 可以通过递归或栈的方式实现。
+
+---
+
+### **深度优先搜索的特点**
+1. **思想**  
+   深度优先搜索会从起始节点出发，沿着一个分支不断向前搜索，直到到达叶子节点或无法继续为止，然后回溯到上一个节点，继续搜索未访问的节点。
+
+2. **适用场景**  
+   - 遍历图或树。
+   - 求解路径问题，如迷宫、连通性检测。
+   - 回溯问题，如排列组合、子集问题。
+
+---
+
+### **深度优先搜索的实现方法**
+#### 1. **递归实现**
+递归本质上利用了系统栈来存储未完成的状态，因此代码简洁。
+```python
+def dfs_recursive(graph, node, visited):
+    if node not in visited:
+        visited.add(node)  # 标记节点为已访问
+        print(node)  # 处理节点
+        for neighbor in graph[node]:
+            dfs_recursive(graph, neighbor, visited)
+```
+
+#### 2. **栈实现（非递归）**
+手动使用栈模拟递归，适用于递归深度过大可能导致栈溢出的情况。
+```python
+def dfs_stack(graph, start):
+    visited = set()
+    stack = [start]
+    
+    while stack:
+        node = stack.pop()  # 栈顶节点出栈
+        if node not in visited:
+            visited.add(node)  # 标记为已访问
+            print(node)  # 处理节点
+            stack.extend(graph[node])  # 将邻居节点压入栈
+```
+
+---
+
+### **深度优先搜索的应用**
+1. **图的遍历**
+   - 检测图的连通性。
+   - 计算连通分量。
+2. **路径问题**
+   - 找到从起点到终点的所有路径。
+   - 判断是否存在路径。
+3. **回溯问题**
+   - 求解数独。
+   - N 皇后问题。
+4. **拓扑排序**
+   - 对有向无环图（DAG）进行排序。
+
+---
+
+### **Python 深度优先搜索示例**
+
+#### 1. 图的连通性检测
+```python
+def is_connected(graph, start):
+    visited = set()
+    dfs_recursive(graph, start, visited)
+    return len(visited) == len(graph)
+```
+
+#### 2. 求解所有路径
+```python
+def find_all_paths(graph, start, end, path=[]):
+    path = path + [start]
+    if start == end:
+        return [path]
+    if start not in graph:
+        return []
+    
+    paths = []
+    for node in graph[start]:
+        if node not in path:
+            new_paths = find_all_paths(graph, node, end, path)
+            paths.extend(new_paths)
+    return paths
+```
+
+#### 3. N 皇后问题（回溯）
+```python
+def solve_n_queens(n):
+    def is_safe(board, row, col):
+        for i in range(row):
+            if board[i] == col or abs(board[i] - col) == abs(i - row):
+                return False
+        return True
+
+    def dfs(board, row):
+        if row == n:
+            result.append(board[:])
+            return
+        
+        for col in range(n):
+            if is_safe(board, row, col):
+                board[row] = col
+                dfs(board, row + 1)
+                board[row] = -1  # 回溯
+
+    result = []
+    dfs([-1] * n, 0)
+    return result
+```
+
+---
+
+### **深度优先搜索的优缺点**
+#### 优点：
+- 实现简单，递归代码直观。
+- 遍历深度优先，适合处理树形结构问题。
+
+#### 缺点：
+- 当图的深度较大时，可能导致递归栈溢出。
+- 无法保证找到最短路径（需要 BFS）。
