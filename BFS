@@ -1,0 +1,119 @@
+### **广度优先搜索（Breadth-First Search, BFS）概述**
+广度优先搜索是一种图或树的遍历算法，按照“逐层扩展”的方式进行搜索。它使用队列（Queue）来存储当前层的节点，并逐层访问所有相邻节点。
+
+---
+
+### **广度优先搜索的特点**
+1. **思想**  
+   BFS 从起点出发，首先访问所有距离起点为1的节点，然后访问距离为2的节点，依此类推，直到遍历所有节点。
+
+2. **适用场景**  
+   - 最短路径问题（无权图）。
+   - 搜索所有可能的路径或状态空间。
+   - 连通性检测。
+
+3. **实现方式**  
+   - 借助队列（Queue）实现。
+   - 使用集合（Set）记录已访问节点，避免重复访问。
+
+---
+
+### **广度优先搜索的实现步骤**
+1. **初始化队列**  
+   将起始节点加入队列，作为搜索的起点。
+
+2. **访问节点**  
+   每次从队列中取出一个节点，标记为已访问，并将其所有未访问的邻居节点加入队列。
+
+3. **重复**  
+   继续从队列中取出节点，直到队列为空。
+
+---
+
+### **广度优先搜索的Python实现**
+
+#### 1. 基本BFS实现
+```python
+from collections import deque
+
+def bfs(graph, start):
+    visited = set()
+    queue = deque([start])
+    
+    while queue:
+        node = queue.popleft()  # 从队列中取出一个节点
+        if node not in visited:
+            visited.add(node)  # 标记为已访问
+            print(node)  # 处理节点
+            queue.extend(graph[node])  # 将邻居节点加入队列
+```
+
+#### 2. 最短路径问题
+```python
+from collections import deque
+
+def shortest_path(graph, start, end):
+    queue = deque([(start, 0)])  # 队列存储 (当前节点, 路径长度)
+    visited = set()
+    
+    while queue:
+        node, distance = queue.popleft()
+        if node == end:
+            return distance  # 找到终点，返回路径长度
+        
+        if node not in visited:
+            visited.add(node)
+            for neighbor in graph[node]:
+                if neighbor not in visited:
+                    queue.append((neighbor, distance + 1))
+    
+    return -1  # 无法到达终点
+```
+
+#### 3. 迷宫最短路径问题
+```python
+from collections import deque
+
+def shortest_path_in_maze(maze, start, end):
+    rows, cols = len(maze), len(maze[0])
+    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]  # 右、下、左、上四个方向
+    queue = deque([(start[0], start[1], 0)])  # (行, 列, 距离)
+    visited = set([start])
+    
+    while queue:
+        x, y, dist = queue.popleft()
+        if (x, y) == end:
+            return dist  # 到达终点返回距离
+        
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < rows and 0 <= ny < cols and maze[nx][ny] == 0 and (nx, ny) not in visited:
+                visited.add((nx, ny))
+                queue.append((nx, ny, dist + 1))
+    
+    return -1  # 无法到达终点
+```
+
+---
+
+### **广度优先搜索的应用**
+1. **图的遍历**
+   - 检测连通分量。
+   - 找到无权图中的最短路径。
+2. **状态空间搜索**
+   - 如棋盘问题、迷宫问题。
+3. **层级遍历**
+   - 在树的层级遍历中非常常用。
+4. **最小步数问题**
+   - 求解从一个状态到目标状态所需的最小操作次数。
+
+---
+
+### **广度优先搜索的优缺点**
+#### 优点：
+- 能够找到无权图中的最短路径。
+- 遍历方式保证按层级顺序进行，适用于状态空间搜索。
+
+#### 缺点：
+- 空间复杂度较高，尤其是搜索空间较大时，可能导致内存不足。
+- 需要额外的数据结构（队列）存储节点。
