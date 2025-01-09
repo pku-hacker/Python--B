@@ -1,226 +1,94 @@
-# Assignment #1: 自主学习
+### **动态规划（Dynamic Programming, DP）概述**
+动态规划是一种解决最优化问题的算法思想，主要通过将问题分解为更小的子问题来解决。与分治法不同，动态规划通过存储子问题的解来避免重复计算，从而优化时间复杂度。
 
-Updated 0110 GMT+8 Sep 10, 2024
+---
 
-2024 fall, Complied by ==南宫圣光，元培，2000094627==
+### **动态规划的核心思想**
+1. **重叠子问题（Overlapping Subproblems）**  
+   一个问题可以分解为多个子问题，且这些子问题在计算过程中会重复出现。
 
+2. **最优子结构（Optimal Substructure）**  
+   问题的全局最优解可以通过子问题的最优解来构建。
 
+3. **状态转移方程（State Transition Equation）**  
+   动态规划的核心在于找出递推关系，即状态转移方程。它描述了如何从已求解的子问题推导出当前问题的解。
 
-## 1. 题目
+---
 
-### 02733: 判断闰年
+### **动态规划的实现步骤**
+1. **定义状态（Define States）**  
+   确定问题的子状态，一般通过一个数组或矩阵来表示。
+   - 示例：`dp[i]` 表示到第 `i` 个位置的最优解。
 
-http://cs101.openjudge.cn/practice/02733/
+2. **状态转移方程（State Transition Formula）**  
+   写出状态间的递推关系，通常需要分析问题的特点和约束条件。
+   - 示例：斐波那契数列的转移方程：`dp[i] = dp[i-1] + dp[i-2]`
 
+3. **初始化（Initialization）**  
+   确定边界条件，给出问题的初始状态。
+   - 示例：`dp[0] = 0`, `dp[1] = 1`
 
+4. **计算顺序（Iteration Order）**  
+   根据递推关系，按照正确的顺序计算状态。
 
-思路：很容易
+5. **返回结果（Return Result）**  
+   根据问题需求返回最终结果，通常是 `dp` 数组的一个特定位置。
 
-花费时间：10min
+---
 
-##### 代码
+### **动态规划的分类**
+1. **线性动态规划**  
+   问题的状态依赖于单一维度。  
+   示例：斐波那契数列、最长递增子序列。
 
+2. **二维动态规划**  
+   问题的状态依赖于两个维度。  
+   示例：背包问题、最长公共子序列。
+
+3. **区间动态规划**  
+   状态依赖于某个区间的值。  
+   示例：矩阵链乘法问题。
+
+4. **树形动态规划**  
+   状态定义在树的节点上，状态间根据树的结构递推。  
+   示例：树的直径、树的最小覆盖问题。
+
+---
+
+### **Python 动态规划示例**
+#### 1. 斐波那契数列
 ```python
-##判断闰年
-a = int(input())
-
-if (a % 4 == 0 and a % 100 != 0) or (a % 400 == 0):
-    print("Y")
-else:
-    print("N") 
+def fibonacci(n):
+    dp = [0] * (n + 1)
+    dp[1] = 1
+    for i in range(2, n + 1):
+        dp[i] = dp[i - 1] + dp[i - 2]
+    return dp[n]
 ```
 
-
-
-代码运行截图 ==（至少包含有"Accepted"）==
-
-![image-20240930200822037](C:\Users\남궁성광\AppData\Roaming\Typora\typora-user-images\image-20240930200822037.png)
-
-### 02750: 鸡兔同笼
-
-http://cs101.openjudge.cn/practice/02750/
-
-
-
-思路：简单
-
-花费时间：10min
-
-##### 代码
-
+#### 2. 01 背包问题
 ```python
-##鸡兔同笼
-a =int(input())
-
-if a % 4 == 0:
-    min = int(a / 4)
-    max = int(a / 2)
-    print(min, max)
-elif (a % 4 != 0 and a % 2 == 0):
-    min = int(a / 4 + 1)
-    max = int(a / 2)
-    print(min, max)
-else:
-    print(0, 0)
-```
-
-
-
-代码运行截图 ==（至少包含有"Accepted"）==
-
-![Weixin Image_20240930195938](C:\Users\남궁성광\Desktop\파이썬 숙제\Weixin Image_20240930195938.png)
-
-### 50A. Domino piling
-
-greedy, math, 800, http://codeforces.com/problemset/problem/50/A
-
-
-
-思路： // 表示除完后整数部分
-
-花费时间：20min
-
-##### 代码
-
-```python
-##Domino Piling
-M, N = map(int, input().split())
-
-
-if M % 2 != 0 and N % 2 != 0:
-    max = M * (N//2) + (M//2)
-    print(int(max))
-else:
-    max = M * N / 2
-    print(int(max))
-
-```
-
-
-
-代码运行截图 ==（AC代码截图，至少包含有"Accepted"）==
-
-![image-20240930200611435](C:\Users\남궁성광\AppData\Roaming\Typora\typora-user-images\image-20240930200611435.png)
-
-
-
-### 1A. Theatre Square
-
-math, 1000, https://codeforces.com/problemset/problem/1/A
-
-
-
-思路：像是一个IQ Test
-
-花费时间：30min
-
-##### 代码
-
-```python
-##Theatre Square
-def minimum_flagstones(n, m, a):
-    # Calculate number of flagstones needed along the length and width
-    flagstones_in_n = (n + a - 1) // a
-    flagstones_in_m = (m + a - 1) // a
+def knapsack(weights, values, capacity):
+    n = len(weights)
+    dp = [[0] * (capacity + 1) for _ in range(n + 1)]
     
-    # Total flagstones needed
-    total_flagstones = flagstones_in_n * flagstones_in_m
+    for i in range(1, n + 1):
+        for w in range(capacity + 1):
+            if weights[i - 1] <= w:
+                dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - weights[i - 1]] + values[i - 1])
+            else:
+                dp[i][w] = dp[i - 1][w]
     
-    return total_flagstones
-
-n, m, a = map(int, input().split())
-print(minimum_flagstones(n, m, a))
-
+    return dp[n][capacity]
 ```
 
+---
 
+### **动态规划的优缺点**
+#### 优点：
+- 避免重复计算，提高算法效率。
+- 可以解决很多复杂的最优化问题。
 
-代码运行截图 ==（AC代码截图，至少包含有"Accepted"）==
-
-![image-20240930201306406](C:\Users\남궁성광\AppData\Roaming\Typora\typora-user-images\image-20240930201306406.png)
-
-
-
-### 112A. Petya and Strings
-
-implementation, strings, 1000, http://codeforces.com/problemset/problem/112/A
-
-
-
-思路：运用strip()和lower()很重要
-
-花费时间：30min
-
-##### 代码
-
-```python
-##Petya and Strings
-# Input: Read two strings
-str1 = input().strip()
-str2 = input().strip()
-
-# Convert both strings to lowercase to ignore case
-str1 = str1.lower()
-str2 = str2.lower()
-
-# Compare the strings lexicographically
-if str1 < str2:
-    print(-1)
-elif str1 > str2:
-    print(1)
-else:
-    print(0)
-
-```
-
-
-
-代码运行截图 ==（AC代码截图，至少包含有"Accepted"）==
-
-![image-20240930201733133](C:\Users\남궁성광\AppData\Roaming\Typora\typora-user-images\image-20240930201733133.png)
-
-
-
-### 231A. Team
-
-bruteforce, greedy, 800, http://codeforces.com/problemset/problem/231/A
-
-
-
-思路：觉得把思考转换成语言很重要
-
-花费时间：20min
-
-##### 代码
-
-```python
-##Team
-question_num = int(input())
-implement_num = 0
-
-for i in range (question_num):
-    Petya, Vasya, Tonya = map(int, input().split())
-    if Petya + Vasya + Tonya >= 2:
-        implement_num += 1
-    else:
-        implement_num = implement_num
-        
-print(implement_num)
-```
-
-
-
-代码运行截图 ==（AC代码截图，至少包含有"Accepted"）==
-
-![image-20240930201909688](C:\Users\남궁성광\AppData\Roaming\Typora\typora-user-images\image-20240930201909688.png)
-
-
-
-## 2. 学习总结和收获
-
-==如果作业题目简单，有否额外练习题目，比如：OJ“计概2024fall每日选做”、CF、LeetCode、洛谷等网站题目。==
-
-练了python基础感觉有热身动动脑子的感觉
-
-
-
+#### 缺点：
+- 需要额外的存储空间。
+- 有些问题的状态和转移方程较难设计。
